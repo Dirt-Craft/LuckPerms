@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "me.lucko.luckperms.forge.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "CClientSettingsPacketAccessor",
+    "ServerLoginNetworkHandlerAccessor",
+    "ServerPlayerEntityMixin",
+    "CommandsMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
