@@ -150,9 +150,4 @@ public abstract class ServerPlayerEntityMixin implements MixinUser {
         String language = ((CClientSettingsPacketAccessor) information).getLanguage();
         this.luckperms$locale = TranslationManager.parseLocale(language);
     }
-
-    @Inject(at = @At("TAIL"), method = "triggerDimensionChangeTriggers")
-    private void luckperms_onChangeDimension(ServerWorld targetWorld, CallbackInfo ci) {
-        PlayerChangeWorldCallback.EVENT.invoker().onChangeWorld(this.getServerWorld(), targetWorld, (ServerPlayerEntity) (Object) this);
-    }
 }
