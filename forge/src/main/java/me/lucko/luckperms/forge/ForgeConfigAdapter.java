@@ -25,19 +25,22 @@
 
 package me.lucko.luckperms.forge;
 
-import me.lucko.luckperms.common.plugin.scheduler.AbstractJavaScheduler;
+import me.lucko.luckperms.common.config.generic.adapter.ConfigurateConfigAdapter;
+import me.lucko.luckperms.common.plugin.LuckPermsPlugin;
 
-import java.util.concurrent.Executor;
+import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
+import ninja.leaping.configurate.loader.ConfigurationLoader;
 
-public class FabricSchedulerAdapter extends AbstractJavaScheduler {
-    private final Executor sync;
+import java.nio.file.Path;
 
-    public FabricSchedulerAdapter(LPForgeBootstrap bootstrap) {
-        this.sync = r -> bootstrap.getServer().orElseThrow(() -> new IllegalStateException("Server not ready")).executeBlocking(r);
+public class ForgeConfigAdapter extends ConfigurateConfigAdapter {
+    public ForgeConfigAdapter(LuckPermsPlugin plugin, Path path) {
+        super(plugin, path);
     }
 
     @Override
-    public Executor sync() {
-        return this.sync;
+    protected ConfigurationLoader<? extends ConfigurationNode> createLoader(Path path) {
+        return HoconConfigurationLoader.builder().setPath(path).build();
     }
 }

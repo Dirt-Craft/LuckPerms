@@ -23,42 +23,21 @@
  *  SOFTWARE.
  */
 
-package me.lucko.luckperms.forge.listeners;
+package me.lucko.luckperms.forge;
 
-import me.lucko.luckperms.common.config.ConfigKeys;
-import me.lucko.luckperms.common.locale.Message;
-import me.lucko.luckperms.forge.LPForgePlugin;
-import net.minecraft.command.CommandSource;
+import me.lucko.luckperms.common.plugin.scheduler.AbstractJavaScheduler;
 
-import java.util.regex.Pattern;
+import java.util.concurrent.Executor;
 
-public class FabricOtherListeners {
-    private static final Pattern OP_COMMAND_PATTERN = Pattern.compile("^/?(deop|op)( .*)?$");
+public class ForgeSchedulerAdapter extends AbstractJavaScheduler {
+    private final Executor sync;
 
-    private LPForgePlugin plugin;
-
-    public FabricOtherListeners(LPForgePlugin plugin) {
-        this.plugin = plugin;
+    public ForgeSchedulerAdapter(LPForgeBootstrap bootstrap) {
+        this.sync = r -> bootstrap.getServer().orElseThrow(() -> new IllegalStateException("Server not ready")).executeBlocking(r);
     }
 
-    public void registerListeners() {
-        PreExecuteCommandCallback.EVENT.register(this::onPreExecuteCommand);
-    }
-
-    private boolean onPreExecuteCommand(CommandSource source, String input) {
-        if (input.isEmpty()) {
-            return true;
-        }
-
-        if (this.plugin.getConfiguration().get(ConfigKeys.OPS_ENABLED)) {
-            return true;
-        }
-
-        if (OP_COMMAND_PATTERN.matcher(input).matches()) {
-            Message.OP_DISABLED.send(this.plugin.getSenderFactory().wrap(source));
-            return false;
-        }
-
-        return true;
+    @Override
+    public Executor sync() {
+        return this.sync;
     }
 }

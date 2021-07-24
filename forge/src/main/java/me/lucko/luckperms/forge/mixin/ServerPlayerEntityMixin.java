@@ -30,7 +30,7 @@ import me.lucko.luckperms.common.context.QueryOptionsCache;
 import me.lucko.luckperms.common.locale.TranslationManager;
 import me.lucko.luckperms.common.model.User;
 import me.lucko.luckperms.common.verbose.event.PermissionCheckEvent;
-import me.lucko.luckperms.forge.context.FabricContextManager;
+import me.lucko.luckperms.forge.context.ForgeContextManager;
 import me.lucko.luckperms.forge.model.MixinUser;
 
 import net.luckperms.api.query.QueryOptions;
@@ -82,7 +82,7 @@ public abstract class ServerPlayerEntityMixin implements MixinUser {
     }
 
     @Override
-    public QueryOptionsCache<ServerPlayerEntity> getQueryOptionsCache(FabricContextManager contextManager) {
+    public QueryOptionsCache<ServerPlayerEntity> getQueryOptionsCache(ForgeContextManager contextManager) {
         if (this.luckperms$queryOptions == null) {
             this.luckperms$queryOptions = contextManager.newQueryOptionsCache((ServerPlayerEntity) (Object) this);
         }
@@ -100,7 +100,7 @@ public abstract class ServerPlayerEntityMixin implements MixinUser {
 
         // ensure query options cache is initialised too.
         if (this.luckperms$queryOptions == null) {
-            this.getQueryOptionsCache((FabricContextManager) user.getPlugin().getContextManager());
+            this.getQueryOptionsCache((ForgeContextManager) user.getPlugin().getContextManager());
         }
     }
 

@@ -39,10 +39,10 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 
 import java.util.UUID;
 
-public class FabricContextManager extends ContextManager<ServerPlayerEntity, ServerPlayerEntity> {
+public class ForgeContextManager extends ContextManager<ServerPlayerEntity, ServerPlayerEntity> {
     public static final OptionKey<Boolean> INTEGRATED_SERVER_OWNER = OptionKey.of("integrated_server_owner", Boolean.class);
 
-    public FabricContextManager(LuckPermsPlugin plugin) {
+    public ForgeContextManager(LuckPermsPlugin plugin) {
         super(plugin, ServerPlayerEntity.class, ServerPlayerEntity.class);
     }
 

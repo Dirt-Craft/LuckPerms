@@ -40,14 +40,14 @@ import me.lucko.luckperms.common.model.manager.user.StandardUserManager;
 import me.lucko.luckperms.common.plugin.AbstractLuckPermsPlugin;
 import me.lucko.luckperms.common.sender.DummyConsoleSender;
 import me.lucko.luckperms.common.sender.Sender;
-import me.lucko.luckperms.forge.context.FabricContextManager;
-import me.lucko.luckperms.forge.context.FabricPlayerCalculator;
-import me.lucko.luckperms.forge.listeners.FabricAutoOpListener;
-import me.lucko.luckperms.forge.listeners.FabricCommandListUpdater;
-import me.lucko.luckperms.forge.listeners.FabricConnectionListener;
-import me.lucko.luckperms.forge.listeners.FabricOtherListeners;
+import me.lucko.luckperms.forge.context.ForgeContextManager;
+import me.lucko.luckperms.forge.context.ForgePlayerCalculator;
+import me.lucko.luckperms.forge.listeners.ForgeAutoOpListener;
+import me.lucko.luckperms.forge.listeners.ForgeCommandListUpdater;
+import me.lucko.luckperms.forge.listeners.ForgeConnectionListener;
+import me.lucko.luckperms.forge.listeners.ForgeOtherListeners;
 import me.lucko.luckperms.forge.listeners.PermissionCheckListener;
-import me.lucko.luckperms.forge.messaging.FabricMessagingFactory;
+import me.lucko.luckperms.forge.messaging.ForgeMessagingFactory;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
@@ -67,10 +67,10 @@ import java.util.stream.Stream;
 public class LPForgePlugin extends AbstractLuckPermsPlugin {
     private final LPForgeBootstrap bootstrap;
 
-    private FabricConnectionListener connectionListener;
-    private FabricCommandExecutor commandManager;
-    private FabricSenderFactory senderFactory;
-    private FabricContextManager contextManager;
+    private ForgeConnectionListener connectionListener;
+    private ForgeCommandExecutor commandManager;
+    private ForgeSenderFactory senderFactory;
+    private ForgeContextManager contextManager;
     private StandardUserManager userManager;
     private StandardGroupManager groupManager;
     private StandardTrackManager trackManager;
@@ -86,21 +86,21 @@ public class LPForgePlugin extends AbstractLuckPermsPlugin {
 
     protected void registerFabricListeners() {
         // Events are registered very early on, and persist between game states
-        this.connectionListener = new FabricConnectionListener(this);
+        this.connectionListener = new ForgeConnectionListener(this);
         this.connectionListener.registerListeners();
 
         new PermissionCheckListener(this).registerListeners();
 
         // Command registration also need to occur early, and will persist across game states as well.
-        this.commandManager = new FabricCommandExecutor(this);
+        this.commandManager = new ForgeCommandExecutor(this);
         this.commandManager.register();
 
-        new FabricOtherListeners(this).registerListeners();
+        new ForgeOtherListeners(this).registerListeners();
     }
 
     @Override
     protected void setupSenderFactory() {
-        this.senderFactory = new FabricSenderFactory(this);
+        this.senderFactory = new ForgeSenderFactory(this);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class LPForgePlugin extends AbstractLuckPermsPlugin {
 
     @Override
     protected ConfigurationAdapter provideConfigurationAdapter() {
-        return new FabricConfigAdapter(this, resolveConfig("luckperms.conf"));
+        return new ForgeConfigAdapter(this, resolveConfig("luckperms.conf"));
     }
 
     @Override
@@ -124,7 +124,7 @@ public class LPForgePlugin extends AbstractLuckPermsPlugin {
 
     @Override
     protected MessagingFactory<?> provideMessagingFactory() {
-        return new FabricMessagingFactory(this);
+        return new ForgeMessagingFactory(this);
     }
 
     @Override
@@ -141,14 +141,14 @@ public class LPForgePlugin extends AbstractLuckPermsPlugin {
 
     @Override
     protected CalculatorFactory provideCalculatorFactory() {
-        return new FabricCalculatorFactory(this);
+        return new ForgeCalculatorFactory(this);
     }
 
     @Override
     protected void setupContextManager() {
-        this.contextManager = new FabricContextManager(this);
+        this.contextManager = new ForgeContextManager(this);
 
-        FabricPlayerCalculator playerCalculator = new FabricPlayerCalculator(this, getConfiguration().get(ConfigKeys.DISABLED_CONTEXTS));
+        ForgePlayerCalculator playerCalculator = new ForgePlayerCalculator(this, getConfiguration().get(ConfigKeys.DISABLED_CONTEXTS));
         playerCalculator.registerListeners();
         this.contextManager.registerCalculator(playerCalculator);
     }
@@ -159,7 +159,7 @@ public class LPForgePlugin extends AbstractLuckPermsPlugin {
 
     @Override
     protected AbstractEventBus<ModContainer> provideEventBus(LuckPermsApiProvider provider) {
-        return new FabricEventBus(this, provider);
+        return new ForgeEventBus(this, provider);
     }
 
     @Override
@@ -183,31 +183,31 @@ public class LPForgePlugin extends AbstractLuckPermsPlugin {
 
         // register autoop listener
         if (getConfiguration().get(ConfigKeys.AUTO_OP)) {
-            getApiProvider().getEventBus().subscribe(new FabricAutoOpListener(this));
+            getApiProvider().getEventBus().subscribe(new ForgeAutoOpListener(this));
         }
 
         // register fabric command list updater
         if (getConfiguration().get(ConfigKeys.UPDATE_CLIENT_COMMAND_LIST)) {
-            getApiProvider().getEventBus().subscribe(new FabricCommandListUpdater(this));
+            getApiProvider().getEventBus().subscribe(new ForgeCommandListUpdater(this));
         }
     }
 
-    public FabricSenderFactory getSenderFactory() {
+    public ForgeSenderFactory getSenderFactory() {
         return this.senderFactory;
     }
 
     @Override
-    public FabricConnectionListener getConnectionListener() {
+    public ForgeConnectionListener getConnectionListener() {
         return this.connectionListener;
     }
 
     @Override
-    public FabricCommandExecutor getCommandManager() {
+    public ForgeCommandExecutor getCommandManager() {
         return this.commandManager;
     }
 
     @Override
-    public FabricContextManager getContextManager() {
+    public ForgeContextManager getContextManager() {
         return this.contextManager;
     }
 

@@ -47,14 +47,14 @@ import java.util.concurrent.TimeUnit;
  *
  * TODO: Extract base class for this and BukkitCommandListUpdater
  */
-public class FabricCommandListUpdater implements LuckPermsEventListener {
+public class ForgeCommandListUpdater implements LuckPermsEventListener {
 
     private final LPForgePlugin plugin;
     private final LoadingCache<UUID, SendBuffer> sendingBuffers = CaffeineFactory.newBuilder()
             .expireAfterAccess(10, TimeUnit.SECONDS)
             .build(SendBuffer::new);
 
-    public FabricCommandListUpdater(LPForgePlugin plugin) {
+    public ForgeCommandListUpdater(LPForgePlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -105,7 +105,7 @@ public class FabricCommandListUpdater implements LuckPermsEventListener {
         private final UUID uniqueId;
 
         SendBuffer(UUID uniqueId) {
-            super(500, TimeUnit.MILLISECONDS, FabricCommandListUpdater.this.plugin.getBootstrap().getScheduler());
+            super(500, TimeUnit.MILLISECONDS, ForgeCommandListUpdater.this.plugin.getBootstrap().getScheduler());
             this.uniqueId = uniqueId;
         }
 

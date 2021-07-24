@@ -32,15 +32,12 @@ import java.net.MalformedURLException;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
 
-public class FabricClassPathAppender implements ClassPathAppender {
+public class ForgeClassPathAppender implements ClassPathAppender {
 
     //https://github.com/MinecraftForge/MinecraftForge/blob/064ae6961b7875adc6f114f97f7ad0dc7a0b059c/src/fmllauncher/java/net/minecraftforge/fml/loading/FMLLoader.java#L212-L221
     @Override
     public void addJarToClasspath(Path file) {
         try {
-                    // Fabric abstracts class loading away to the FabricLauncher.
-            // TODO(i509VCB): Work on API for Fabric Loader which does not touch internals.
-            //  Player wants to use project jigsaw in the future.
             ClassLoadingUtilityLP.addClassPathToClassLoader((URLClassLoader)this.getClass().getClassLoader(), file.toUri().toURL());
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);

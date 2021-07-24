@@ -49,7 +49,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.Optional;
 import java.util.Set;
 
-public class FabricPlayerCalculator implements ContextCalculator<ServerPlayerEntity> {
+public class ForgePlayerCalculator implements ContextCalculator<ServerPlayerEntity> {
     private static final EnumNamer<GameType> GAMEMODE_NAMER = new EnumNamer<>(
             GameType.class,
             EnumNamer.LOWER_CASE_NAME
@@ -61,7 +61,7 @@ public class FabricPlayerCalculator implements ContextCalculator<ServerPlayerEnt
     private final boolean world;
     //private final boolean dimensionType;
 
-    public FabricPlayerCalculator(LPForgePlugin plugin, Set<String> disabled) {
+    public ForgePlayerCalculator(LPForgePlugin plugin, Set<String> disabled) {
         this.plugin = plugin;
         this.gamemode = !disabled.contains(DefaultContextKeys.GAMEMODE_KEY);
         this.world = !disabled.contains(DefaultContextKeys.WORLD_KEY);

@@ -25,22 +25,23 @@
 
 package me.lucko.luckperms.forge;
 
-import me.lucko.luckperms.common.config.generic.adapter.ConfigurateConfigAdapter;
+import me.lucko.luckperms.common.api.LuckPermsApiProvider;
+import me.lucko.luckperms.common.event.AbstractEventBus;
 import me.lucko.luckperms.common.plugin.LuckPermsPlugin;
 
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
+import net.minecraftforge.fml.ModContainer;
 
-import java.nio.file.Path;
-
-public class FabricConfigAdapter extends ConfigurateConfigAdapter {
-    public FabricConfigAdapter(LuckPermsPlugin plugin, Path path) {
-        super(plugin, path);
+public class ForgeEventBus extends AbstractEventBus<ModContainer> {
+    public ForgeEventBus(LuckPermsPlugin plugin, LuckPermsApiProvider apiProvider) {
+        super(plugin, apiProvider);
     }
 
     @Override
-    protected ConfigurationLoader<? extends ConfigurationNode> createLoader(Path path) {
-        return HoconConfigurationLoader.builder().setPath(path).build();
+    protected ModContainer checkPlugin(Object mod) throws IllegalArgumentException {
+        if (mod instanceof ModContainer) {
+            return (ModContainer) mod;
+        }
+
+        throw new IllegalArgumentException("Object " + mod + " (" + mod.getClass().getName() + ") is not a ModContainer.");
     }
 }

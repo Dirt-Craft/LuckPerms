@@ -35,17 +35,17 @@ import me.lucko.luckperms.common.calculator.processor.SpongeWildcardProcessor;
 import me.lucko.luckperms.common.calculator.processor.WildcardProcessor;
 import me.lucko.luckperms.common.config.ConfigKeys;
 import me.lucko.luckperms.forge.calculator.ServerOwnerProcessor;
-import me.lucko.luckperms.forge.context.FabricContextManager;
+import me.lucko.luckperms.forge.context.ForgeContextManager;
 
 import net.luckperms.api.query.QueryOptions;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FabricCalculatorFactory implements CalculatorFactory {
+public class ForgeCalculatorFactory implements CalculatorFactory {
     private final LPForgePlugin plugin;
 
-    public FabricCalculatorFactory(LPForgePlugin plugin) {
+    public ForgeCalculatorFactory(LPForgePlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -67,7 +67,7 @@ public class FabricCalculatorFactory implements CalculatorFactory {
             processors.add(new SpongeWildcardProcessor());
         }
 
-        boolean integratedOwner = queryOptions.option(FabricContextManager.INTEGRATED_SERVER_OWNER).orElse(false);
+        boolean integratedOwner = queryOptions.option(ForgeContextManager.INTEGRATED_SERVER_OWNER).orElse(false);
         if (integratedOwner && this.plugin.getConfiguration().get(ConfigKeys.FABRIC_INTEGRATED_SERVER_OWNER_BYPASSES_CHECKS)) {
             processors.add(new ServerOwnerProcessor());
         }

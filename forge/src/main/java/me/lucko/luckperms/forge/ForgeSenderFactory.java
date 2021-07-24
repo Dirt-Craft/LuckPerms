@@ -43,10 +43,10 @@ import net.minecraftforge.server.permission.PermissionAPI;
 import java.util.Locale;
 import java.util.UUID;
 
-public class FabricSenderFactory extends SenderFactory<LPForgePlugin, CommandSource> {
+public class ForgeSenderFactory extends SenderFactory<LPForgePlugin, CommandSource> {
     private final LPForgePlugin plugin;
 
-    public FabricSenderFactory(LPForgePlugin plugin) {
+    public ForgeSenderFactory(LPForgePlugin plugin) {
         super(plugin);
         this.plugin = plugin;
     }

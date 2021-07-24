@@ -36,8 +36,8 @@ import net.luckperms.api.messenger.MessengerProvider;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class FabricMessagingFactory extends MessagingFactory<LPForgePlugin> {
-    public FabricMessagingFactory(LPForgePlugin plugin) {
+public class ForgeMessagingFactory extends MessagingFactory<LPForgePlugin> {
+    public ForgeMessagingFactory(LPForgePlugin plugin) {
         super(plugin);
     }
 

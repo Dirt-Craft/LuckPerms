@@ -23,25 +23,42 @@
  *  SOFTWARE.
  */
 
-package me.lucko.luckperms.forge;
+package me.lucko.luckperms.forge.listeners;
 
-import me.lucko.luckperms.common.api.LuckPermsApiProvider;
-import me.lucko.luckperms.common.event.AbstractEventBus;
-import me.lucko.luckperms.common.plugin.LuckPermsPlugin;
+import me.lucko.luckperms.common.config.ConfigKeys;
+import me.lucko.luckperms.common.locale.Message;
+import me.lucko.luckperms.forge.LPForgePlugin;
+import net.minecraft.command.CommandSource;
 
-import net.minecraftforge.fml.ModContainer;
+import java.util.regex.Pattern;
 
-public class FabricEventBus extends AbstractEventBus<ModContainer> {
-    public FabricEventBus(LuckPermsPlugin plugin, LuckPermsApiProvider apiProvider) {
-        super(plugin, apiProvider);
+public class ForgeOtherListeners {
+    private static final Pattern OP_COMMAND_PATTERN = Pattern.compile("^/?(deop|op)( .*)?$");
+
+    private LPForgePlugin plugin;
+
+    public ForgeOtherListeners(LPForgePlugin plugin) {
+        this.plugin = plugin;
     }
 
-    @Override
-    protected ModContainer checkPlugin(Object mod) throws IllegalArgumentException {
-        if (mod instanceof ModContainer) {
-            return (ModContainer) mod;
+    public void registerListeners() {
+        PreExecuteCommandCallback.EVENT.register(this::onPreExecuteCommand);
+    }
+
+    private boolean onPreExecuteCommand(CommandSource source, String input) {
+        if (input.isEmpty()) {
+            return true;
         }
 
-        throw new IllegalArgumentException("Object " + mod + " (" + mod.getClass().getName() + ") is not a ModContainer.");
+        if (this.plugin.getConfiguration().get(ConfigKeys.OPS_ENABLED)) {
+            return true;
+        }
+
+        if (OP_COMMAND_PATTERN.matcher(input).matches()) {
+            Message.OP_DISABLED.send(this.plugin.getSenderFactory().wrap(source));
+            return false;
+        }
+
+        return true;
     }
 }

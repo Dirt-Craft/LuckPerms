@@ -38,12 +38,12 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 
 import java.util.Map;
 
-public class FabricAutoOpListener implements LuckPermsEventListener {
+public class ForgeAutoOpListener implements LuckPermsEventListener {
     private static final String NODE = "luckperms.autoop";
 
     private final LPForgePlugin plugin;
 
-    public FabricAutoOpListener(LPForgePlugin plugin) {
+    public ForgeAutoOpListener(LPForgePlugin plugin) {
         this.plugin = plugin;
     }
 

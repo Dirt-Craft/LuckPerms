@@ -47,12 +47,12 @@ import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static net.minecraft.command.Commands.argument;
 import static net.minecraft.command.Commands.literal;
 
-public class FabricCommandExecutor extends CommandManager implements Command<CommandSource>, SuggestionProvider<CommandSource> {
+public class ForgeCommandExecutor extends CommandManager implements Command<CommandSource>, SuggestionProvider<CommandSource> {
     private static final String[] COMMAND_ALIASES = new String[] {"luckperms", "lp", "perm", "perms", "permission", "permissions"};
 
     private final LPForgePlugin plugin;
 
-    public FabricCommandExecutor(LPForgePlugin plugin) {
+    public ForgeCommandExecutor(LPForgePlugin plugin) {
         super(plugin);
         this.plugin = plugin;
     }

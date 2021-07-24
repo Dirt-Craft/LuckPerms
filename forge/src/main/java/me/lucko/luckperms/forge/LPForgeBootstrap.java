@@ -107,8 +107,8 @@ public final class LPForgeBootstrap implements LuckPermsBootstrap {
     public LPForgeBootstrap() {
         MinecraftForge.EVENT_BUS.addListener(this::onInitializeServer);
         this.logger = new Log4jPluginLogger(LogManager.getLogger(MODID));
-        this.schedulerAdapter = new FabricSchedulerAdapter(this);
-        this.classPathAppender = new FabricClassPathAppender();
+        this.schedulerAdapter = new ForgeSchedulerAdapter(this);
+        this.classPathAppender = new ForgeClassPathAppender();
         this.plugin = new LPForgePlugin(this);
     }
     
