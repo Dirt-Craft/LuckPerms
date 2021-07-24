@@ -26,17 +26,15 @@
 package me.lucko.luckperms.forge;
 
 import com.mojang.authlib.GameProfile;
-
 import me.lucko.luckperms.common.plugin.bootstrap.LuckPermsBootstrap;
 import me.lucko.luckperms.common.plugin.classpath.ClassPathAppender;
 import me.lucko.luckperms.common.plugin.logging.Log4jPluginLogger;
 import me.lucko.luckperms.common.plugin.logging.PluginLogger;
 import me.lucko.luckperms.common.plugin.scheduler.SchedulerAdapter;
-
+import me.lucko.luckperms.forge.listeners.LuckPermissionHandler;
 import net.luckperms.api.platform.Platform;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
@@ -45,6 +43,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
+import net.minecraftforge.server.permission.PermissionAPI;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
@@ -53,12 +52,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -110,6 +104,7 @@ public final class LPForgeBootstrap implements LuckPermsBootstrap {
         this.schedulerAdapter = new ForgeSchedulerAdapter(this);
         this.classPathAppender = new ForgeClassPathAppender();
         this.plugin = new LPForgePlugin(this);
+        PermissionAPI.setPermissionHandler(new LuckPermissionHandler(plugin));
     }
     
     // provide adapters

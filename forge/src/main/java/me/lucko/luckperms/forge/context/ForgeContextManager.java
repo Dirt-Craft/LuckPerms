@@ -29,8 +29,6 @@ import me.lucko.luckperms.common.config.ConfigKeys;
 import me.lucko.luckperms.common.context.ContextManager;
 import me.lucko.luckperms.common.context.QueryOptionsCache;
 import me.lucko.luckperms.common.plugin.LuckPermsPlugin;
-
-
 import me.lucko.luckperms.forge.model.MixinUser;
 import net.luckperms.api.context.ImmutableContextSet;
 import net.luckperms.api.query.OptionKey;

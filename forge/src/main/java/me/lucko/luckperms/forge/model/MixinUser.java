@@ -27,7 +27,6 @@ package me.lucko.luckperms.forge.model;
 
 import me.lucko.luckperms.common.context.QueryOptionsCache;
 import me.lucko.luckperms.common.model.User;
-
 import me.lucko.luckperms.forge.context.ForgeContextManager;
 import net.luckperms.api.query.QueryOptions;
 import net.luckperms.api.util.Tristate;

@@ -31,7 +31,6 @@ import me.lucko.luckperms.forge.LPForgePlugin;
 import me.lucko.luckperms.forge.event.PreParseCommandEvent;
 import net.minecraft.command.CommandSource;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.CommandEvent;
 
 import java.util.regex.Pattern;
 

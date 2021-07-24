@@ -46,9 +46,7 @@ import me.lucko.luckperms.forge.listeners.ForgeAutoOpListener;
 import me.lucko.luckperms.forge.listeners.ForgeCommandListUpdater;
 import me.lucko.luckperms.forge.listeners.ForgeConnectionListener;
 import me.lucko.luckperms.forge.listeners.ForgeOtherListeners;
-import me.lucko.luckperms.forge.listeners.PermissionCheckListener;
 import me.lucko.luckperms.forge.messaging.ForgeMessagingFactory;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.luckperms.api.LuckPerms;
@@ -88,8 +86,6 @@ public class LPForgePlugin extends AbstractLuckPermsPlugin {
         // Events are registered very early on, and persist between game states
         this.connectionListener = new ForgeConnectionListener(this);
         this.connectionListener.registerListeners();
-
-        new PermissionCheckListener(this).registerListeners();
 
         // Command registration also need to occur early, and will persist across game states as well.
         this.commandManager = new ForgeCommandExecutor(this);

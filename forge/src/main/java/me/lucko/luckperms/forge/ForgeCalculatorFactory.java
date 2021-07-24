@@ -28,15 +28,10 @@ package me.lucko.luckperms.forge;
 import me.lucko.luckperms.common.cacheddata.CacheMetadata;
 import me.lucko.luckperms.common.calculator.CalculatorFactory;
 import me.lucko.luckperms.common.calculator.PermissionCalculator;
-import me.lucko.luckperms.common.calculator.processor.DirectProcessor;
-import me.lucko.luckperms.common.calculator.processor.PermissionProcessor;
-import me.lucko.luckperms.common.calculator.processor.RegexProcessor;
-import me.lucko.luckperms.common.calculator.processor.SpongeWildcardProcessor;
-import me.lucko.luckperms.common.calculator.processor.WildcardProcessor;
+import me.lucko.luckperms.common.calculator.processor.*;
 import me.lucko.luckperms.common.config.ConfigKeys;
 import me.lucko.luckperms.forge.calculator.ServerOwnerProcessor;
 import me.lucko.luckperms.forge.context.ForgeContextManager;
-
 import net.luckperms.api.query.QueryOptions;
 
 import java.util.ArrayList;
@@ -68,7 +63,7 @@ public class ForgeCalculatorFactory implements CalculatorFactory {
         }
 
         boolean integratedOwner = queryOptions.option(ForgeContextManager.INTEGRATED_SERVER_OWNER).orElse(false);
-        if (integratedOwner && this.plugin.getConfiguration().get(ConfigKeys.FORGE_INTEGRATED_SERVER_OWNER_BYPASSES_CHECKS)) {
+        if (integratedOwner && this.plugin.getConfiguration().get(ConfigKeys.FABRIC_INTEGRATED_SERVER_OWNER_BYPASSES_CHECKS)) {
             processors.add(new ServerOwnerProcessor());
         }
 

@@ -28,17 +28,10 @@ package me.lucko.luckperms.forge.context;
 import me.lucko.luckperms.common.config.ConfigKeys;
 import me.lucko.luckperms.common.context.contextset.ImmutableContextSetImpl;
 import me.lucko.luckperms.common.util.EnumNamer;
-
 import me.lucko.luckperms.forge.LPForgePlugin;
-import net.luckperms.api.context.Context;
-import net.luckperms.api.context.ContextCalculator;
-import net.luckperms.api.context.ContextConsumer;
-import net.luckperms.api.context.ContextSet;
-import net.luckperms.api.context.DefaultContextKeys;
-import net.luckperms.api.context.ImmutableContextSet;
+import net.luckperms.api.context.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.GameType;
 import net.minecraft.world.server.ServerWorld;
@@ -113,7 +106,7 @@ public class ForgePlayerCalculator implements ContextCalculator<ServerPlayerEnti
         return builder.build();
     }
 
-    private static String getContextKey(ResourceLocation key) {
+    public static String getContextKey(ResourceLocation key) {
         if (key.getNamespace().equals("minecraft")) {
             return key.getPath();
         }
