@@ -30,21 +30,36 @@ dependencies {
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
+    archiveName = "LuckPerms-Forge-${project.ext.fullVersion}-dev.jar"
     manifest {
         attributes([
             "Specification-Title": "luckperms",
             "Specification-Vendor": "luckperms",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
+            "Specification-Version": "${project.ext.fullVersion}",
+            "Implementation-Title": "luckperms",
+            "Implementation-Version": "${project.ext.fullVersion}",
             "Implementation-Vendor" :"luckperms",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
 
+
+processResources {
+    inputs.property 'version', project.ext.fullVersion
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'META-INF/mods.toml'
+        expand 'version': project.ext.fullVersion
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'META-INF/mods.toml'
+    }
+}
+
 shadowJar {
-    archiveName = "luckpermsforge-${project.ext.fullVersion}-dev.jar"
+    archiveName = "LuckPerms-Forge-${project.ext.fullVersion}-dev.jar"
 
     dependencies {
         exclude('net.minecraft.forge:.*')
@@ -112,4 +127,10 @@ minecraft {
         }
     }
 }
-jar.finalizedBy('reobfJar')
+
+reobf {
+    shadowJar { }
+}
+
+tasks.build.dependsOn reobfShadowJar
+jar.finalizedBy('reobfShadowJar')
