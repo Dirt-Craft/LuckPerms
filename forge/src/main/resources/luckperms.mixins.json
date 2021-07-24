@@ -4,9 +4,10 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "CClientSettingsPacketAccessor",
+    "CommandsMixin",
+    "ServerLoginNetHandlerMixin",
     "ServerLoginNetworkHandlerAccessor",
-    "ServerPlayerEntityMixin",
-    "CommandsMixin"
+    "ServerPlayerEntityMixin"
   ],
   "client": [
   ],
