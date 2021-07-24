@@ -25,8 +25,10 @@
 
 package me.lucko.luckperms.forge.mixin;
 
+import me.lucko.luckperms.forge.event.PreParseCommandEvent;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
+import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -36,8 +38,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class CommandsMixin {
     @Inject(at = @At("HEAD"), method = "performCommand", cancellable = true)
     private void commandExecuteCallback(CommandSource source, String input, CallbackInfoReturnable<Integer> info) {
-        if (!PreExecuteCommandCallback.EVENT.invoker().onPreExecuteCommand(source, input)) {
-            info.setReturnValue(0);
-        }
+        if (MinecraftForge.EVENT_BUS.post(new PreParseCommandEvent(source, input))) info.setReturnValue(0);
     }
 }

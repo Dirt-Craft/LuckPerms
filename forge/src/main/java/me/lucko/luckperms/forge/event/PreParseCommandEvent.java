@@ -23,45 +23,32 @@
  *  SOFTWARE.
  */
 
-package me.lucko.luckperms.forge.listeners;
+package me.lucko.luckperms.forge.event;
 
-import me.lucko.luckperms.common.config.ConfigKeys;
-import me.lucko.luckperms.common.locale.Message;
-import me.lucko.luckperms.forge.LPForgePlugin;
-import me.lucko.luckperms.forge.event.PreParseCommandEvent;
 import net.minecraft.command.CommandSource;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.CommandEvent;
+import net.minecraftforge.eventbus.api.Event;
 
-import java.util.regex.Pattern;
-
-public class ForgeOtherListeners {
-    private static final Pattern OP_COMMAND_PATTERN = Pattern.compile("^/?(deop|op)( .*)?$");
-
-    private LPForgePlugin plugin;
-
-    public ForgeOtherListeners(LPForgePlugin plugin) {
-        this.plugin = plugin;
+public class PreParseCommandEvent extends Event {
+    private final CommandSource source;
+    private final String input;
+    public PreParseCommandEvent(CommandSource source, String input){
+        this.source = source;
+        this.input = input;
+    }
+    
+    public CommandSource getSource() {
+        return source;
+    }
+    
+    public String getInput() {
+        return input;
     }
 
-    public void registerListeners() {
-        MinecraftForge.EVENT_BUS.addListener(this::onPreExecuteCommand);
+    @Override
+    public boolean isCancelable()
+    {
+        return false;
     }
-
-    private void onPreExecuteCommand(PreParseCommandEvent event) {
-        String input = event.getInput();
-        CommandSource source = event.getSource();
-        if (input.isEmpty()) {
-            return;
-        }
-
-        if (this.plugin.getConfiguration().get(ConfigKeys.OPS_ENABLED)) {
-            return;
-        }
-
-        if (OP_COMMAND_PATTERN.matcher(input).matches()) {
-            Message.OP_DISABLED.send(this.plugin.getSenderFactory().wrap(source));
-            event.setCanceled(true);
-        }
-    }
+    
+    
 }

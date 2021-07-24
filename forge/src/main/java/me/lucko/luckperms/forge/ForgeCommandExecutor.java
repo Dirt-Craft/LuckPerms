@@ -37,8 +37,8 @@ import me.lucko.luckperms.common.command.CommandManager;
 import me.lucko.luckperms.common.command.utils.ArgumentTokenizer;
 import me.lucko.luckperms.common.sender.Sender;
 
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.command.CommandSource;
+import net.minecraftforge.event.RegisterCommandsEvent;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -57,22 +57,20 @@ public class ForgeCommandExecutor extends CommandManager implements Command<Comm
         this.plugin = plugin;
     }
 
-    public void register() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
-            for (String alias : COMMAND_ALIASES) {
-                LiteralCommandNode<CommandSource> cmd = literal(alias)
-                        .executes(this)
-                        .build();
+    public void register(RegisterCommandsEvent event) {
+        for (String alias : COMMAND_ALIASES) {
+            LiteralCommandNode<CommandSource> cmd = literal(alias)
+                    .executes(this)
+                    .build();
 
-                ArgumentCommandNode<CommandSource, String> args = argument("args", greedyString())
-                        .suggests(this)
-                        .executes(this)
-                        .build();
+            ArgumentCommandNode<CommandSource, String> args = argument("args", greedyString())
+                    .suggests(this)
+                    .executes(this)
+                    .build();
 
-                cmd.addChild(args);
-                dispatcher.getRoot().addChild(cmd);
-            }
-        });
+            cmd.addChild(args);
+            event.getDispatcher().getRoot().addChild(cmd);
+        }
     }
 
     @Override

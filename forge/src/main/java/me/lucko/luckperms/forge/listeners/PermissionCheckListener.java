@@ -41,7 +41,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * Listener to route permission checks made via fabric-permissions-api to LuckPerms.
+ * Listener to route permission checks made via fabric-permissions-api to LuckPerms
  */
 public class PermissionCheckListener {
     private final LPForgePlugin plugin;
@@ -51,7 +51,8 @@ public class PermissionCheckListener {
     }
 
     public void registerListeners() {
-        //todo PermissionCheckEvent.EVENT.register(this::onPermissionCheck);
+        //todo do away with this and just use the forge permission handler shit instead since its better and whatnot lol
+        PermissionCheckEvent.EVENT.register(this::onPermissionCheck);
     }
 
     private @NonNull TriState onPermissionCheck(ISuggestionProvider source, String permission) {

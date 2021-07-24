@@ -62,7 +62,7 @@ import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * Bootstrap plugin for LuckPerms running on Fabric.
+ * Bootstrap plugin for LuckPerms running on Forge.
  */
 @Mod(value = LPForgeBootstrap.MODID)
 public final class LPForgeBootstrap implements LuckPermsBootstrap {
@@ -141,7 +141,7 @@ public final class LPForgeBootstrap implements LuckPermsBootstrap {
         // Register the Server startup/shutdown events now
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarting);
         MinecraftForge.EVENT_BUS.addListener(this::onServerStopping);
-        this.plugin.registerFabricListeners();
+        this.plugin.registerForgeListeners();
     }
 
     private void onServerStarting(FMLServerStartingEvent event) {
@@ -187,7 +187,7 @@ public final class LPForgeBootstrap implements LuckPermsBootstrap {
 
     @Override
     public Platform.Type getType() {
-        return Platform.Type.FABRIC;
+        return Platform.Type.FORGE;
     }
 
     @Override
@@ -203,7 +203,7 @@ public final class LPForgeBootstrap implements LuckPermsBootstrap {
                 .map(c -> c.getModInfo().getVersion().getQualifier())
                 .orElse("unknown");
 
-        return getServer().map(MinecraftServer::getServerVersion).orElse("null") + " - fabric-api@" + forgeApiVersion;
+        return getServer().map(MinecraftServer::getServerVersion).orElse("null") + " - forge-api@" + forgeApiVersion;
     }
 
     @Override

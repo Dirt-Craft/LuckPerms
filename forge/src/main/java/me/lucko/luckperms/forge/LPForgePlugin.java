@@ -84,7 +84,7 @@ public class LPForgePlugin extends AbstractLuckPermsPlugin {
         return this.bootstrap;
     }
 
-    protected void registerFabricListeners() {
+    protected void registerForgeListeners() {
         // Events are registered very early on, and persist between game states
         this.connectionListener = new ForgeConnectionListener(this);
         this.connectionListener.registerListeners();
@@ -93,7 +93,7 @@ public class LPForgePlugin extends AbstractLuckPermsPlugin {
 
         // Command registration also need to occur early, and will persist across game states as well.
         this.commandManager = new ForgeCommandExecutor(this);
-        this.commandManager.register();
+        MinecraftForge.EVENT_BUS.addListener(this.commandManager::register);
 
         new ForgeOtherListeners(this).registerListeners();
     }
