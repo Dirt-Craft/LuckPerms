@@ -42,6 +42,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
 import net.minecraftforge.server.permission.PermissionAPI;
 import org.apache.logging.log4j.LogManager;
@@ -62,7 +64,7 @@ import java.util.concurrent.CountDownLatch;
 public final class LPForgeBootstrap implements LuckPermsBootstrap {
 
     protected static final String MODID = "luckperms";
-    protected static final ModContainer MOD_CONTAINER = ModList.get().getModContainerById(MODID).orElse(null);
+    protected static ModContainer MOD_CONTAINER;
 
     /**
      * The plugin logger
@@ -99,12 +101,11 @@ public final class LPForgeBootstrap implements LuckPermsBootstrap {
     private MinecraftServer server;
     
     public LPForgeBootstrap() {
-        MinecraftForge.EVENT_BUS.addListener(this::onInitializeServer);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInitializeServer);
         this.logger = new Log4jPluginLogger(LogManager.getLogger(MODID));
         this.schedulerAdapter = new ForgeSchedulerAdapter(this);
         this.classPathAppender = new ForgeClassPathAppender();
         this.plugin = new LPForgePlugin(this);
-        PermissionAPI.setPermissionHandler(new LuckPermissionHandler(plugin));
     }
     
     // provide adapters
@@ -126,7 +127,9 @@ public final class LPForgeBootstrap implements LuckPermsBootstrap {
     
     // lifecycle
     public void onInitializeServer(FMLDedicatedServerSetupEvent event) {
+        MOD_CONTAINER = ModList.get().getModContainerById(MODID).orElse(null);
         this.plugin = new LPForgePlugin(this);
+        PermissionAPI.setPermissionHandler(new LuckPermissionHandler(plugin));
         try {
             this.plugin.load();
         } finally {
@@ -203,14 +206,17 @@ public final class LPForgeBootstrap implements LuckPermsBootstrap {
 
     @Override
     public Path getDataDirectory() {
-        return Paths.get(".", "mods", MODID);
+        return FMLPaths.MODSDIR.get().resolve(MODID);
+        //return Paths.get(".", "mods", MODID);
     }
 
     @Override
     public Path getConfigDirectory() {
-        return Paths.get(".", "config", MODID);
+        return FMLPaths.CONFIGDIR.get().resolve(MODID);
+        //return Paths.get(".", "config", MODID);
     }
 
+    /*
     @Override
     public InputStream getResourceStream(String path) {
         try {
@@ -219,6 +225,8 @@ public final class LPForgeBootstrap implements LuckPermsBootstrap {
             return null;
         }
     }
+
+     */
 
     @Override
     public Optional<ServerPlayerEntity> getPlayer(UUID uniqueId) {

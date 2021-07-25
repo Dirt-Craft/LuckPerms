@@ -25,23 +25,37 @@
 
 package me.lucko.luckperms.forge;
 
+import cpw.mods.modlauncher.TransformingClassLoader;
 import me.lucko.luckperms.common.plugin.classpath.ClassPathAppender;
+import sun.misc.Launcher;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.ClassLoadingUtilityLP;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
 
 public class ForgeClassPathAppender implements ClassPathAppender {
-
+    URLClassLoader urlClassLoader;
+    Method addUrl;
     //https://github.com/MinecraftForge/MinecraftForge/blob/064ae6961b7875adc6f114f97f7ad0dc7a0b059c/src/fmllauncher/java/net/minecraftforge/fml/loading/FMLLoader.java#L212-L221
     @Override
     public void addJarToClasspath(Path file) {
         try {
-            ClassLoadingUtilityLP.addClassPathToClassLoader((URLClassLoader)this.getClass().getClassLoader(), file.toUri().toURL());
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            if (urlClassLoader == null) {
+                TransformingClassLoader classLoader = (TransformingClassLoader) getClass().getClassLoader();
+                Field field = ClassLoader.class.getDeclaredField("parent");
+                field.setAccessible(true);
+                this.urlClassLoader = (URLClassLoader) field.get(classLoader);
+                addUrl = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+                addUrl.setAccessible(true);
+            }
+            addUrl.invoke(urlClassLoader, file.toUri().toURL());
+        } catch (NoSuchFieldException | IllegalAccessException | MalformedURLException | NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
         }
     }
-
 }

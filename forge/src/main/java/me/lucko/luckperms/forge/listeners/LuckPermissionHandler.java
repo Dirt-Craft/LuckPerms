@@ -60,11 +60,10 @@ public class LuckPermissionHandler implements IPermissionHandler {
     private final Map<String, DefaultPermissionLevel> defaults = new HashMap<>();
     private final Map<String, String> descriptions = new HashMap<>();
     private final LPForgePlugin plugin;
-    private final QueryOptions defaultQuery;
+    private QueryOptions defaultQuery;
 
     public LuckPermissionHandler(LPForgePlugin plugin) {
         this.plugin = plugin;
-        defaultQuery = QueryOptions.contextual(plugin.getContextManager().getStaticContext());
     }
 
     @Override
@@ -92,9 +91,15 @@ public class LuckPermissionHandler implements IPermissionHandler {
                 MutableContextSet ctxSet = plugin.getContextManager().getStaticContext().mutableCopy();
                 ctxSet.add(new ContextImpl(DefaultContextKeys.WORLD_KEY, ForgePlayerCalculator.getContextKey(context.getWorld().dimension().getRegistryName())));
                 queryOptions = QueryOptions.contextual(ctxSet);
-        } else queryOptions = defaultQuery;
+        } else queryOptions = getDefaultQuery();
 
-        switch (user.getCachedData().getPermissionData(queryOptions).checkPermission(node, PermissionCheckEvent.Origin.PLATFORM_PERMISSION_CHECK).result()) {
+
+        TristateResult result = user.getCachedData().getPermissionData(queryOptions).checkPermission(node, Origin.PLATFORM_PERMISSION_CHECK);
+        VerboseCheckTarget target = VerboseCheckTarget.internal(profile.getName());
+        this.plugin.getVerboseHandler().offerPermissionCheckEvent(Origin.PLATFORM_PERMISSION_CHECK, target, QueryOptionsImpl.DEFAULT_CONTEXTUAL, node, result);
+        this.plugin.getPermissionRegistry().offer(node);
+
+        switch (result.result()) {
             case TRUE: return true;
             case FALSE: return false;
             case UNDEFINED: return defaults.get(node) == DefaultPermissionLevel.ALL;
@@ -107,6 +112,11 @@ public class LuckPermissionHandler implements IPermissionHandler {
     public String getNodeDescription(@NonNull String node) {
         String desc = descriptions.get(node);
         return desc == null? "": desc;
+    }
+
+    public QueryOptions getDefaultQuery(){
+        if (defaultQuery == null) defaultQuery = QueryOptions.contextual(plugin.getContextManager().getStaticContext());
+        return defaultQuery;
     }
 
     private Tristate onOtherPermissionCheck(ISuggestionProvider source, String permission) {
