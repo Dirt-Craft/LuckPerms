@@ -173,7 +173,7 @@ public final class LPForgeBootstrap implements LuckPermsBootstrap {
 
     @Override
     public String getVersion() {
-        return MOD_CONTAINER.getModInfo().getVersion().getQualifier();
+        return MOD_CONTAINER.getModInfo().getVersion().toString();
     }
 
     @Override
@@ -190,18 +190,18 @@ public final class LPForgeBootstrap implements LuckPermsBootstrap {
 
     @Override
     public String getServerBrand() {
-        return "forge@" + ModList.get().getModContainerById("forge")
-                .map(c -> c.getModInfo().getVersion().getQualifier())
-                .orElse("unknown");
+        return "MinecraftForge";
     }
 
     @Override
     public String getServerVersion() {
-        String forgeApiVersion = "forge@" + ModList.get().getModContainerById("forge")
-                .map(c -> c.getModInfo().getVersion().getQualifier())
+        String forgeApiVersion = ModList.get().getModContainerById("forge")
+                .map(c -> c.getModInfo().getVersion().toString())
+                .orElse("unknown");
+        String mcVersion = getServer().map(MinecraftServer::getServerVersion)
                 .orElse("unknown");
 
-        return getServer().map(MinecraftServer::getServerVersion).orElse("null") + " - forge-api@" + forgeApiVersion;
+        return String.format("Minecraft: %s - Forge: %s", mcVersion, forgeApiVersion) ;
     }
 
     @Override
