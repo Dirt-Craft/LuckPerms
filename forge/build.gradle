@@ -1,10 +1,12 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = "https://repo.spongepowered.org/maven"}
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath("org.spongepowered:mixingradle:0.7-SNAPSHOT")
     }
 }
 plugins {
@@ -13,6 +15,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: "org.spongepowered.mixin"
 
 version = '1.0'
 group = 'me.lucko.luckperms' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -24,6 +27,7 @@ archivesBaseName = 'luckperms'
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
+    annotationProcessor("org.spongepowered:mixin:0.8.2:processor")
     minecraft 'net.minecraftforge:forge:1.16.5-36.1.25'
     compile project(':common')
 }
@@ -100,6 +104,10 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
+            args("--mixin.config", "luckperms.mixins.json")
+            workingDirectory(project.file("run"))
+            singleInstance(true)
+
             mods {
                 examplemod {
                     source sourceSets.main
@@ -110,6 +118,10 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
+            args("--mixin.config", "luckperms.mixins.json")
+            workingDirectory(project.file("run"))
+            singleInstance(true)
+
             mods {
                 examplemod {
                     source sourceSets.main
@@ -129,6 +141,11 @@ minecraft {
             }
         }
     }
+}
+
+mixin {
+    disableRefMapWarning = true
+    add(sourceSets.main, "luckperms.refmap.json")
 }
 
 reobf {
