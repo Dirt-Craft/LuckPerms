@@ -17,8 +17,8 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "org.spongepowered.mixin"
 
-version = '1.0'
-group = 'me.lucko.luckperms' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = project.ext.fullVersion
+group = 'me.lucko.luckperms'
 archivesBaseName = 'luckperms'
 
 //java.toolchain.languageVersion = JavaLanguageVersion.of(8)
@@ -143,8 +143,8 @@ minecraft {
     }
 }
 
+
 mixin {
-    disableRefMapWarning = true
     add(sourceSets.main, "luckperms.refmap.json")
 }
 
